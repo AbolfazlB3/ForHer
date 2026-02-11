@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Invitation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="glow-bg" id="glow-bg"></div>
+    
+    <main class="container" id="main-container">
+        <div class="glass-card" id="proposal-card">
+            <span class="badge">PRIVATE INVITATION</span>
+            <h1 class="headline">A Moment of Intention</h1>
+            <p class="subtext">Beyond the noise, there is only this.</p>
+            
+            <h2 class="main-question">will you be my valentine?</h2>
+            
+            <div class="button-row">
+                <button id="yes-btn" class="btn btn-yes">YES</button>
+                <button id="no-btn" class="btn btn-no">NO</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Exquisite.</h3>
+            <p>I looked forward to this answer.</p>
+        </div>
+    </div>
+
+    <canvas id="debug-canvas"></canvas>
+
+    <script src="motion.js"></script>
+    <script src="ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+:root {
+    --bg-dark: #02040a;
+    --neon-pink: #ff2d75;
+    --gold: #d4af37;
+    --gold-glow: rgba(212, 175, 55, 0.3);
+    --violet: #4a00e0;
+    --glass: rgba(255, 255, 255, 0.03);
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background-color: var(--bg-dark);
+    color: white;
+    font-family: var(--font-sans);
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Cinematic Background */
+.glow-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at 20% 30%, var(--violet) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, #1a0b2e 0%, transparent 40%);
+    z-index: -1;
+    transition: opacity 1.5s ease;
+}
+
+.glass-card {
+    position: relative;
+    padding: 3rem;
+    border-radius: 24px;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    z-index: 10;
+    will-change: transform;
+}
+
+.badge {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.headline {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.subtext {
+    font-size: 0.9rem;
+    opacity: 0.6;
+    margin-bottom: 3rem;
+}
+
+.main-question {
+    font-size: 1.8rem;
+    margin-bottom: 3rem;
+    background: linear-gradient(90deg, var(--neon-pink), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+}
+
+.button-row {
+    position: relative;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.btn {
+    padding: 0.8rem 2.5rem;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.3s ease;
+}
+
+.btn-yes {
+    background: white;
+    color: black;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.btn-yes:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+}
+
+.btn-no {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: absolute; /* Controlled by JS */
+}
+
+/* Modal and Particles */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.modal-content h3 {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    color: var(--gold);
+}
+
+#debug-canvas {
+    position: fixed;
+    top: 0; left: 0; pointer-events: none;
+    z-index: 999;
+    display: none;
+}
