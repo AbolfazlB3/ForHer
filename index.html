@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Valentine — Neon x Gold</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="orbs" aria-hidden="true">
+      <div class="orb" style="left: 10%; top: 18%"></div>
+      <div class="orb" style="left: 68%; top: 10%"></div>
+      <div class="orb" style="left: 46%; top: 72%"></div>
+    </div>
+
+    <main class="card" id="playground">
+      <canvas class="debug-canvas" id="debugCanvas"></canvas>
+
+      <div class="inner">
+        <div class="badge"><span class="dot"></span> neon romance • gold luxury</div>
+
+        <h1>One question.<br />All the sparkle.</h1>
+        <p class="sub">A neon blush glow wrapped in a gold shine — romantic, modern, and just a little irresistible.</p>
+
+        <div class="q">Are tou sure about it?</div>
+
+        <div class="row">
+          <!-- <div class="arena" id="arena" aria-label="Answer buttons"> -->
+          <button class="yes" id="yesBtn">Yes</button>
+          <!-- NO is still in DOM here (for semantics) but will be absolutely positioned -->
+          <button class="no" id="noBtn" aria-label="No (good luck)">No</button>
+        </div>
+
+        <div class="hint">Try clicking “No”. 🙂</div>
+      </div>
+    </main>
+
+    <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mtitle" aria-describedby="mtext">
+      <div class="modal-card">
+        <div class="modal-body">
+          <div style="font-size: 40px; line-height: 1">💞</div>
+          <div class="modal-title" id="mtitle">It’s a date.</div>
+          <p class="modal-text" id="mtext">You just made this page’s entire universe sparkle.</p>
+          <div class="modal-actions">
+            <button class="btn-ghost" id="closeBtn">Close</button>
+            <button class="btn-ghost" id="moreBtn">More hearts</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wire UI first, then logic engine -->
+    <script src="./motion.js"></script>
+    <script src="./ui.js"></script>
+  </body>
+</html>
