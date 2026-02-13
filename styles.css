@@ -491,7 +491,7 @@ button:active {
 }
 
 .modal-title {
-  margin: 10px 0 6px;
+  margin: 10px 0 10px;
   font-size: 26px;
   font-weight: 900;
   letter-spacing: -.02em;
@@ -505,7 +505,7 @@ button:active {
   margin: 0 0 14px;
   color: rgba(251, 247, 240, .85);
   line-height: 1.45;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .modal-actions {
@@ -513,7 +513,7 @@ button:active {
   gap: 10px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 10px;
+  margin-top: 30px;
 }
 
 .modal-img {
