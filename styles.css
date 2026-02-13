@@ -9,7 +9,7 @@
 
   --pink: #ff4fd8;
   --rose: #ff3b77;
-  --violet: #8a5cff;
+  /* --violet: #8a5cff; */
 
   --gold1: #f7d88a;
   --gold2: #cfa24a;
@@ -17,7 +17,24 @@
   --shadow: 0 30px 90px rgba(0, 0, 0, 0.7);
   --r: 28px;
   --blur: 18px;
+
+  /* refined palette */
+  --pinkHot:#ff2f92;
+  --pinkRom:#ff6bd6;
+  /* --rose:#ff3b77; */
+
+  --goldSoft:#f8e3b0;
+  --goldMid:#e5b85c;
+  --goldDeep:#c9962a;
+
+  --violet:#8c63ff;
+
+  /* interaction-driven rim controls */
+  --rimHeat: 0;   /* 0..1 => more gold when higher */
+  --rimTilt: 0;   /* 0..1 => slight hue bias */
 }
+
+
 
 * {
   box-sizing: border-box;
@@ -28,6 +45,7 @@ body {
 }
 body {
   margin: 0;
+  padding: 0;
   font-family:
     ui-sans-serif,
     system-ui,
@@ -44,7 +62,6 @@ body {
   overflow: hidden;
   display: grid;
   place-items: center;
-  padding: 28px;
 }
 
 /* subtle grain */
@@ -127,10 +144,45 @@ body::before {
   text-align: center;
   position: relative;
   overflow: hidden;
+  isolation:isolate; /* ensures glows layer nicely */
+  user-select: none;
+  -moz-user-select: none;
+}
+
+/* OUTER aura + dynamic rim */
+.card::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:inherit;
+  pointer-events:none;
+  z-index:0;
+
+  /* The rim is built with multiple gradients:
+     - pink aura
+     - gold aura
+     - violet undertone
+     We blend them with --rimHeat and a slow animation. */
+  background:
+    radial-gradient(900px 320px at calc(18% + var(--rimTilt) * 20%) 8%,
+      rgba(255, 107, 214, calc(.22 - var(--rimHeat)*.06)),
+      transparent 60%),
+    radial-gradient(900px 320px at calc(82% - var(--rimTilt) * 20%) 12%,
+      rgba(229, 184, 92, calc(.18 + var(--rimHeat)*.10)),
+      transparent 62%),
+    radial-gradient(820px 320px at 50% 120%,
+      rgba(140, 99, 255, .13),
+      transparent 62%);
+
+  filter: blur(0px);
+  opacity:.95;
+  transform: translateZ(0);
+  animation: rimDrift 26s ease-in-out infinite;
+  mix-blend-mode: screen;
 }
 
 /* neon + gold sheen */
-.card::before {
+/* .card::before {
   content: "";
   position: absolute;
   inset: -2px;
@@ -140,8 +192,52 @@ body::before {
     radial-gradient(700px 300px at 50% 120%, rgba(138, 92, 255, 0.14), transparent 60%);
   opacity: 0.95;
   pointer-events: none;
+} */
+
+@keyframes rimDrift{
+  0%   { filter: blur(0px); transform: translate3d(0,0,0) scale(1); }
+  50%  { filter: blur(0.2px); transform: translate3d(0,-1px,0) scale(1.01); }
+  100% { filter: blur(0px); transform: translate3d(0,0,0) scale(1); }
 }
-.card::after {
+
+/* INNER glass highlight + rare shimmer sweep */
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  z-index:0;
+
+  background:
+    /* inner top highlight */
+    linear-gradient(180deg,
+      rgba(255,255,255,.10),
+      rgba(255,255,255,.03) 28%,
+      transparent 52%),
+
+    /* warm gold polish */
+    radial-gradient(520px 200px at 50% 0%,
+      rgba(248, 227, 176, calc(.10 + var(--rimHeat)*.08)),
+      transparent 65%),
+
+    /* micro sweep - extremely subtle */
+    linear-gradient(115deg,
+      transparent 0%,
+      rgba(255,255,255, .0) 35%,
+      rgba(255,255,255, .08) 45%,
+      rgba(255,255,255, .0) 55%,
+      transparent 100%);
+
+  opacity:.62;
+  mix-blend-mode: soft-light;
+
+  /* sweep motion: long period so it feels “rare” */
+  background-size: auto, auto, 260% 260%;
+  animation: sheenSweep 34s ease-in-out infinite;
+}
+
+/* .card::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -150,6 +246,12 @@ body::before {
     radial-gradient(520px 200px at 50% 0%, rgba(247, 216, 138, 0.1), transparent 65%);
   opacity: 0.55;
   pointer-events: none;
+} */
+
+@keyframes sheenSweep{
+  0%, 78% { background-position: 0 0, 0 0, -140% -120%; opacity:.56; }
+  88%     { background-position: 0 0, 0 0,  40%  20%;  opacity:.70; }
+  100%    { background-position: 0 0, 0 0,  140% 120%; opacity:.56; }
 }
 
 .inner {
@@ -205,10 +307,15 @@ h1 {
   font-size: clamp(22px, 3vw, 34px);
   font-weight: 900;
   letter-spacing: -0.02em;
-  background: linear-gradient(90deg, var(--pink), var(--rose), var(--gold1), var(--gold2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  background: linear-gradient(90deg,
+    var(--pinkRom),
+    var(--rose),
+    var(--goldSoft),
+    var(--goldMid),
+    var(--goldDeep));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
   text-shadow: 0 18px 60px rgba(255, 79, 216, 0.06);
 }
 
@@ -261,8 +368,8 @@ button:active {
 .yes {
   color: #140f08;
   background:
-    radial-gradient(120px 80px at 30% 25%, rgba(255, 255, 255, 0.85), transparent 60%),
-    linear-gradient(90deg, var(--pink), var(--rose), var(--gold1), var(--gold2));
+    radial-gradient(120px 80px at 30% 25%, rgba(255,255,255,.85), transparent 60%),
+    linear-gradient(90deg, var(--pinkRom), var(--rose), var(--goldSoft), var(--goldMid), var(--goldDeep));
   box-shadow:
     0 18px 55px rgba(255, 79, 216, 0.16),
     0 22px 75px rgba(247, 216, 138, 0.12),
@@ -436,6 +543,18 @@ button:active {
   .hearts {
     transition: none;
   }
+}
+
+#constellation{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  opacity:.50;            /* subtle */
+  mix-blend-mode: screen; /* luminous */
+  filter: blur(.0px);
+  z-index:0;              /* behind card; orbs are also fixed so keep ordering */
 }
 
 /* Debug overlay covers entire card */
