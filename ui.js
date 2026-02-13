@@ -48,10 +48,17 @@
     engine.setPointerPos(pt.clientX, pt.clientY);
   }
 
-  window.addEventListener("pointermove", updatePointerFromEvent, { passive: true });
-  window.addEventListener("mousemove", updatePointerFromEvent, { passive: true });
-  window.addEventListener("touchmove", updatePointerFromEvent, { passive: true });
-  window.addEventListener("touchstart", updatePointerFromEvent, { passive: true });
+  const supportsPointer = "PointerEvent" in window;
+  console.log("supportsPointer", supportsPointer);
+
+  if (supportsPointer) {
+    window.addEventListener("pointermove", updatePointerFromEvent, { passive: true });
+    window.addEventListener("pointerdown", updatePointerFromEvent, { passive: true });
+  } else {
+    window.addEventListener("mousemove", updatePointerFromEvent, { passive: true });
+    window.addEventListener("touchmove", updatePointerFromEvent, { passive: true });
+    window.addEventListener("touchstart", updatePointerFromEvent, { passive: true });
+  }
 
   // Rim lighting response
   function updateRimVars() {
@@ -166,14 +173,17 @@
 
   function onNoPress(e) {
     e.preventDefault();
-    updatePointerFromEvent(e);
+    // updatePointerFromEvent(e);
     chasePressure += PRESS_BUMP;
     engine.nudgeFleeImpulse();
   }
 
-  noBtn.addEventListener("pointerdown", onNoPress, { passive: false });
-  // iOS Safari sometimes needs explicit touchstart to feel instant/reliable
-  noBtn.addEventListener("touchstart", onNoPress, { passive: false });
+  if (supportsPointer) {
+    noBtn.addEventListener("pointerdown", onNoPress, { passive: false });
+  } else {
+    // iOS Safari sometimes needs explicit touchstart to feel instant/reliable
+    noBtn.addEventListener("touchstart", onNoPress, { passive: false });
+  }
   // Optional: also catch "click" to prevent rare edge-cases (e.g., old browsers)
   noBtn.addEventListener("click", (e) => e.preventDefault());
 

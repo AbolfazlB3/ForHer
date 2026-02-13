@@ -47,14 +47,8 @@ html,
 body {
   height: 100%;
   user-select: none;
-}
-
-/* Disable image dragging */
-img {
-  pointer-events: auto;
-  /* keep clickable */
-  -webkit-user-drag: none;
-  user-drag: none;
+  overscroll-behavior: none;
+  /* Android/Chrome/Firefox */
 }
 
 body {
@@ -70,6 +64,12 @@ body {
   overflow: hidden;
   display: grid;
   place-items: center;
+  min-height: 100dvh;
+  /* modern mobile viewport unit */
+  -webkit-text-size-adjust: 100%;
+  /* prevent iOS font zooming */
+  touch-action: none;
+  /* reduces gesture interference */
 }
 
 /* subtle grain */
@@ -82,6 +82,13 @@ body::before {
   mix-blend-mode: soft-light;
   pointer-events: none;
   z-index: 1;
+}
+
+/* Disable image dragging */
+img {
+  /* keep clickable */
+  -webkit-user-drag: none;
+  user-drag: none;
 }
 
 /* constellation canvas behind everything */
@@ -233,6 +240,12 @@ body::before {
   }
 }
 
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .card, .modal-card {
+    background: rgba(12, 12, 20, 0.92);
+  }
+}
+
 .inner {
   /* position: relative; */
   z-index: 1;
@@ -315,6 +328,7 @@ button {
   box-shadow: 0 18px 55px rgba(0, 0, 0, .55);
   transition: transform .12s ease, filter .2s ease, box-shadow .2s ease;
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 button:hover {
@@ -343,7 +357,6 @@ button:active {
   transform: scale(1.1) translateY(-2px);
   filter: brightness(1.16);
 }
-
 
 .no {
   color: rgba(251, 247, 240, .92);
