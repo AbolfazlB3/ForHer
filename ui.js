@@ -91,7 +91,6 @@
   let chasePressure = 0;         // fades to 0 over time, grows with chasing + presses
   let lastTick = performance.now();
 
-  let rageArmed = true;          // re-trigger guard
   let rageShown = false;
 
   const PRESS_BUMP = 0.60;       // how much each No press adds
@@ -100,15 +99,18 @@
 
   const CHASE_RADIUS = 220;      // px radius around the NO button that counts as "chasing"
   const TRIGGER_AT = 3.0;        // threshold to open the modal
-  const REARM_BELOW = 1.2;       // must decay below this to re-arm
+  const RAGE_CLOSE_COOLDOWN_MS = 1500; // tweak: 300–700 feels good
+  let rageCloseUnlockedAt = 0;
 
   function openRageModal() {
     if (!rageModal) return;
     rageModal.classList.add("on");
     rageShown = true;
+    rageCloseUnlockedAt = performance.now() + RAGE_CLOSE_COOLDOWN_MS;
   }
 
   function closeRageModal() {
+    if (performance.now() < rageCloseUnlockedAt) return;
     rageModal?.classList.remove("on");
     rageShown = false;
     chasePressure = 0;
