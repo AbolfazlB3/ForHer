@@ -8,6 +8,8 @@
   const modal = document.getElementById("modal");
   const closeBtn = document.getElementById("closeBtn");
   const moreBtn = document.getElementById("moreBtn");
+  const rageModal = document.getElementById("rageModal");
+  const rageCloseBtn = document.getElementById("rageCloseBtn");
 
   if (!arena || !noBtn || !yesBtn) {
     console.error("Missing required DOM elements.");
@@ -83,9 +85,78 @@
   }
   requestAnimationFrame(updateRimVars);
 
+  // ---------------------------
+  // "How hard are you trying to click NO?" meter
+  // ---------------------------
+  let chasePressure = 0;         // fades to 0 over time, grows with chasing + presses
+  let lastTick = performance.now();
+
+  let rageArmed = true;          // re-trigger guard
+  let rageShown = false;
+
+  const PRESS_BUMP = 0.60;       // how much each No press adds
+  const CHASE_GAIN = 0.80;       // per-second gain when pointer is close
+  const DECAY_PER_SEC = 0.98;    // per-second decay toward 0
+
+  const CHASE_RADIUS = 220;      // px radius around the NO button that counts as "chasing"
+  const TRIGGER_AT = 3.0;        // threshold to open the modal
+  const REARM_BELOW = 1.2;       // must decay below this to re-arm
+
+  function openRageModal() {
+    if (!rageModal) return;
+    rageModal.classList.add("on");
+    rageShown = true;
+  }
+
+  function closeRageModal() {
+    rageModal?.classList.remove("on");
+    rageShown = false;
+    chasePressure = 0;
+  }
+
+  rageCloseBtn?.addEventListener("click", closeRageModal);
+  rageModal?.addEventListener("click", (e) => { if (e.target === rageModal) closeRageModal(); });
+
+  function updateChasePressure(now) {
+    const dt = Math.min(0.05, Math.max(0, (now - lastTick) / 1000));
+    lastTick = now;
+
+    // decay
+    if (chasePressure > 0.000001) {
+      const damp = Math.pow(DECAY_PER_SEC, dt);
+      chasePressure *= damp;
+      chasePressure = Math.max(0, chasePressure - 0.0001);
+    } else {
+      chasePressure = 0.0;
+    }
+
+    // chase contribution (pointer close to NO)
+    if (shared.pointer?.has) {
+      const nb = noBtn.getBoundingClientRect();
+      const cx = nb.left + nb.width / 2;
+      const cy = nb.top + nb.height / 2;
+
+      const d = Math.hypot(shared.pointer.x - cx, shared.pointer.y - cy);
+      if (d < CHASE_RADIUS) {
+        // closer => more gain
+        const closeness = 1 - (d / CHASE_RADIUS);   // 0..1
+        chasePressure += (closeness * CHASE_GAIN * dt);
+      }
+    }
+
+    // trigger
+    if (!rageShown && chasePressure >= TRIGGER_AT) {
+      openRageModal();
+    }
+
+    requestAnimationFrame(updateChasePressure);
+  }
+  requestAnimationFrame(updateChasePressure);
+
   function onNoPress(e) {
     e.preventDefault();
     updatePointerFromEvent(e);
+    chasePressure += PRESS_BUMP;
     engine.nudgeFleeImpulse();
   }
 
@@ -121,7 +192,7 @@
 
       const left = Math.random() * w;
       const dx = (Math.random() * 2 - 1) * 180 + "px";
-      const delay = (Math.random() * 0.25) + "s";
+      const delay = (Math.random() * 1.2) + "s";
       const dur = (1.45 + Math.random() * 1.15) + "s";
       const size = 10 + Math.random() * 12;
 

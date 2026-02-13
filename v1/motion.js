@@ -50,7 +50,7 @@
         idleMaxSpeed: 90,
         idleMaxAccel: 260,
         edgePush: 1500,
-        damping: 0.88,
+        damping: 0.006,
 
         _init: false,
       };
@@ -335,7 +335,8 @@
       }
 
       // Damping
-      const damp = Math.pow(s.damping, dt * 60);
+      const damp = Math.pow(s.damping, dt);
+      // const damp = Math.pow(s.damping, dt * 60);
       s.vx *= damp;
       s.vy *= damp;
 
