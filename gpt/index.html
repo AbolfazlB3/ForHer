@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valentine</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div class="background-glow"></div>
+
+  <main class="stage">
+    <div class="card" id="card">
+      <canvas id="debugCanvas" class="debug-canvas"></canvas>
+
+      <div class="badge">A QUESTION, INTENTIONALLY ASKED</div>
+
+      <h1 class="headline">There is something I would like to ask you.</h1>
+
+      <p class="subtext">
+        Not impulsively. Not playfully.  
+        But with clarity.
+      </p>
+
+      <h2 class="question">
+        will you be my valentine?
+      </h2>
+
+      <div class="buttons">
+        <button class="btn yes" id="yesBtn">Yes</button>
+        <button class="btn no" id="noBtn">No</button>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h2>Then it’s decided.</h2>
+      <p>
+        I promise something beautiful. 🌸  
+        This was always meant to be.
+      </p>
+    </div>
+  </div>
+
+  <script src="motion.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>
