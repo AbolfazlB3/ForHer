@@ -83,12 +83,17 @@
   }
   requestAnimationFrame(updateRimVars);
 
-  // No button: prevent click + add impulse
-  noBtn.addEventListener("pointerdown", (e) => {
+  function onNoPress(e) {
     e.preventDefault();
     updatePointerFromEvent(e);
     engine.nudgeFleeImpulse();
-  });
+  }
+
+  noBtn.addEventListener("pointerdown", onNoPress, { passive: false });
+  // iOS Safari sometimes needs explicit touchstart to feel instant/reliable
+  noBtn.addEventListener("touchstart", onNoPress, { passive: false });
+  // Optional: also catch "click" to prevent rare edge-cases (e.g., old browsers)
+  noBtn.addEventListener("click", (e) => e.preventDefault());
 
   // Keyboard focus safety
   noBtn.addEventListener("focus", () => engine.teleportSafe());

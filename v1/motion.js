@@ -45,11 +45,11 @@
         // Tune
         fearRadius: 260, // start reacting from farther away (whole card feels nicer)
         hardRadius: 110, // panic zone
-        maxSpeed: 900,
-        maxAccel: 3200,
+        maxSpeed: 1500,
+        maxAccel: 5000,
         idleMaxSpeed: 90,
         idleMaxAccel: 260,
-        edgePush: 1400,
+        edgePush: 1500,
         damping: 0.88,
 
         _init: false,
@@ -72,8 +72,24 @@
     }
 
     nudgeFleeImpulse() {
-      this.state.vx += (Math.random() * 2 - 1) * 260;
-      this.state.vy += (Math.random() * 2 - 1) * 200;
+      const s = this.state;
+      const pad = 16;
+      const maxX = Math.max(1, s.aw - s.w - pad * 4);
+      const maxY = Math.max(1, s.ah - s.h - pad * 4);
+      const tx = pad * 2 + Math.random() * maxX;
+      const ty = pad * 2 + Math.random() * maxY;
+      const strength = 1500;
+
+      let dx = tx - s.x;
+      let dy = ty - s.y;
+
+      const d = Math.hypot(dx, dy) || 1;
+      dx /= d;
+      dy /= d;
+
+      // Add impulse toward the target
+      s.vx += dx * strength;
+      s.vy += dy * strength;
     }
 
     teleportSafe() {
