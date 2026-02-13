@@ -130,6 +130,15 @@
       chasePressure = 0.0;
     }
 
+    {
+      // --- Visual warning on NO button (0..1) as we approach trigger ---
+      // Start showing at 0 when far, ramp up as we near TRIGGER_AT.
+      const START_AT = 0.05; // or use 0.8 to only begin glowing late
+      const t = (chasePressure - START_AT) / Math.max(0.0001, (TRIGGER_AT - START_AT));
+      const noHeat = Math.min(1, Math.max(0, t));
+      noBtn.style.setProperty("--noHeat", noHeat.toFixed(3));
+    }
+
     // chase contribution (pointer close to NO)
     if (shared.pointer?.has) {
       const nb = noBtn.getBoundingClientRect();

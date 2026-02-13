@@ -325,6 +325,7 @@ button:active {
   filter: brightness(1.16);
 }
 
+
 .no {
   color: rgba(251, 247, 240, .92);
   background: rgba(255, 255, 255, .05);
@@ -335,6 +336,38 @@ button:active {
   z-index: 3;
   will-change: left, top;
   touch-action: none;
+
+  /* 0..1 from JS */
+  --noHeat: 0;
+
+  /* subtle base transition so it "breathes" in smoothly */
+  transition: box-shadow .25s ease, filter .25s ease, border-color .25s ease, transform .12s ease;
+
+  /* border brightening */
+  border-color: rgba(255, 255, 255, calc(0.14 + var(--noHeat) * 0.22));
+
+  /* glow + depth */
+  box-shadow:
+    0 18px 55px rgba(0, 0, 0, .55),
+    0 0 calc(10px + var(--noHeat) * 26px) rgba(248, 227, 176, calc(var(--noHeat) * 0.55)),
+    0 0 calc(6px + var(--noHeat) * 18px) rgba(255, 107, 214, calc(var(--noHeat) * 0.35));
+
+  /* tiny "danger" pop as it gets hot */
+  filter: brightness(calc(1 + var(--noHeat) * 0.18)) saturate(calc(1 + var(--noHeat) * 0.10));
+}
+
+.no::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--noHeat);
+  background:
+    radial-gradient(120px 80px at 25% 25%, rgba(255, 255, 255, .35), transparent 60%),
+    linear-gradient(90deg, rgba(248, 227, 176, .75), rgba(255, 107, 214, .75));
+  filter: blur(10px);
+  mix-blend-mode: screen;
 }
 
 .hint {
@@ -367,7 +400,8 @@ button:active {
   background: linear-gradient(135deg, rgba(255, 107, 214, .95), rgba(248, 227, 176, .95));
   filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .25));
   animation: fall 1.8s ease-in forwards;
-  animation-fill-mode: backwards; /* or: both */
+  animation-fill-mode: backwards;
+  /* or: both */
 }
 
 .heart::before,
@@ -493,14 +527,14 @@ button:active {
 }
 
 /* .rageTryAgainBtn { */
-  /* appearance: none; */
-  /* border: 0; */
-  /* cursor: pointer; */
-  /* padding: 12px 18px; */
-  /* border-radius: 14px; */
-  /* font-weight: 900; */
-  /* letter-spacing: -.01em; */
-  /* color: rgba(15, 16, 34, .95);
+/* appearance: none; */
+/* border: 0; */
+/* cursor: pointer; */
+/* padding: 12px 18px; */
+/* border-radius: 14px; */
+/* font-weight: 900; */
+/* letter-spacing: -.01em; */
+/* color: rgba(15, 16, 34, .95);
   background: linear-gradient(90deg, rgba(255, 107, 214, .95), rgba(248, 227, 176, .95));
   box-shadow: 0 16px 40px rgba(0, 0, 0, .45);
   transition: transform .12s ease, filter .12s ease;
