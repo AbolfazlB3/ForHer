@@ -20,6 +20,28 @@
     return;
   }
 
+  function getVisitorId() {
+    const key = "valentine_vid";
+    let id = localStorage.getItem(key);
+    if (!id) {
+      id = crypto?.randomUUID?.() || "vid_" + Math.random().toString(16).slice(2) + Date.now().toString(16);
+      localStorage.setItem(key, id);
+    }
+    return id;
+  }
+
+  const VISITOR_ID = getVisitorId();
+
+  function track(action, extra = {}) {
+    const now = new Date();
+    window.gtag?.("event", action, {
+      visitor_id: VISITOR_ID,                // pseudonymous
+      local_iso_time: now.toISOString(),     // optional (GA has server time already)
+      tz_offset_min: -now.getTimezoneOffset(), // optional
+      ...extra,
+    });
+  };
+
   // Shared state for other modules (e.g. constellation.js)
   const shared = (window.ValentineShared = window.ValentineShared || {});
   shared.pointer = shared.pointer || { x: window.innerWidth / 2, y: window.innerHeight / 2, has: false };
@@ -114,6 +136,8 @@
     rageModal.classList.add("on");
     rageShown = true;
     rageCloseUnlockedAt = performance.now() + RAGE_CLOSE_COOLDOWN_MS;
+
+    track("rage_modal_open");
   }
 
   function closeRageModal() {
@@ -252,6 +276,8 @@
     burstHearts(38);
     openModal();
     shared.emitYes(); // tells constellation to flash
+
+    track("yes_modal_open");
   });
 
   // Start engine
