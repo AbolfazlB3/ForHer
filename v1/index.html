@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Question?!</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <canvas id="constellation" aria-hidden="true"></canvas>
+
+  <div class="orbs" aria-hidden="true">
+    <div class="orb" style="left: 10%; top: 18%"></div>
+    <div class="orb" style="left: 68%; top: 10%"></div>
+    <div class="orb" style="left: 46%; top: 72%"></div>
+  </div>
+
+  <main class="card" id="playground">
+    <canvas class="debug-canvas" id="debugCanvas"></canvas>
+
+    <div class="inner">
+      <div class="badge"><span class="dot"></span> Still curious • Still smiling </div>
+
+      <h1>Hey…<br />One small question.</h1>
+      <p class="sub">A moment wrapped in light, sealed with gold, and written just for us.</p>
+
+      <div class="q">Will you be my valentine?</div>
+
+      <div class="row">
+        <button class="yes" id="yesBtn">Yes</button>
+        <button class="no" id="noBtn" aria-label="No (good luck)">No</button>
+      </div>
+
+      <div class="hint">Careful. The "No" button bites. 😉</div>
+    </div>
+  </main>
+
+  <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mtitle" aria-describedby="mtext">
+    <div class="modal-card">
+      <div class="modal-body">
+        <div style="font-size: 40px; line-height: 1">💞</div>
+        <div class="modal-title" id="mtitle">Yayyyy!!!</div>
+        <p class="modal-text" id="mtext">You just turned my whole universe golden! 😁❤️🎉</p>
+        <div class="modal-actions">
+          <button class="btn-ghost" id="closeBtn">Close</button>
+          <button class="btn-ghost" id="moreBtn">More hearts!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="rageModal" role="dialog" aria-modal="true" aria-labelledby="rtitle" aria-describedby="rtext">
+    <div class="modal-card">
+      <div class="modal-body">
+        <img class="modal-img" id="rageImg" src="./caught.jpg" alt="No? 😼 Don't mess with me!" />
+
+        <div class="modal-title" id="rtitle">No? 😼</div>
+        <p class="modal-text" id="rtext">Don't mess with me!</p>
+
+        <div class="modal-actions">
+          <button class="btn-ghost rageTryAgainBtn" id="rageCloseBtn" type="button">Try Again 🥺</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Engine first -->
+  <script src="./motion.js"></script>
+  <!-- UI wiring second -->
+  <script src="./ui.js"></script>
+  <!-- Visual background last (uses shared state from ui.js) -->
+  <script src="./constellation.js"></script>
+</body>
+
+</html>
